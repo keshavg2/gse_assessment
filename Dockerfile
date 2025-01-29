@@ -1,21 +1,28 @@
-# Use official Ruby image
-FROM ruby:3.0.0
+FROM ruby:3.1.2
 
 # Install dependencies
+RUN apt-get update -qq && apt-get install -y \
+  build-essential \
+  libpq-dev \
+  nodejs \
+  yarn
+
 RUN apt-get update -qq && apt-get install -y postgresql-client
 
-# Set up working directory
+# Set up the working directory
 WORKDIR /app
-COPY . /app
 
-# Install Gems
+# Copy the Gemfile and Gemfile.lock, then install gems
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-# Precompile assets
+# Copy the rest of the application
+COPY . .
+
+# Precompile assets (if in production environment)
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 
-# Expose the app on port 3000
+# Expose port and set the default command
 EXPOSE 3000
-
-# Start the Rails server
 CMD ["rails", "server", "-b", "0.0.0.0"]
+
