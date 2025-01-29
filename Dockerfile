@@ -19,9 +19,6 @@ RUN bundle install
 # Copy the rest of the application
 COPY . .
 
-# Precompile assets (if in production environment)
-RUN RAILS_ENV=production bundle exec rake assets:precompile
-
 # Expose port and set the default command
 EXPOSE 3000
 CMD ["rails", "server", "-b", "0.0.0.0"]
