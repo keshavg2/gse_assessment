@@ -3,7 +3,7 @@ class CreateContacts < ActiveRecord::Migration[7.2]
     create_table :contacts do |t|
       t.string :email
       t.string :phone
-      t.references :primary, foreign_key: { to_table: :contacts }, index: true
+      t.integer :primary_contact_id
       t.timestamps
     end
   end
